@@ -1,14 +1,10 @@
-import { createStore } from 'vuex'
+import { createStore } from 'vuex';
+import race from './modules/race';
+import horses from './modules/horses';
 
 export default createStore({
-  state: {
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
   modules: {
+    race,
+    horses
   }
-})
+});
