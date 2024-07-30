@@ -15,6 +15,29 @@ interface RaceState {
   paused: boolean;
 }
 
+const colors = [
+  "#FF5733",
+  "#33FF57",
+  "#3357FF",
+  "#F0F033",
+  "#FF33A1",
+  "#33FFF0",
+  "#FF8333",
+  "#33FF83",
+  "#8333FF",
+  "#F0F0F0",
+  "#FF3366",
+  "#66FF33",
+  "#33FF99",
+  "#9966FF",
+  "#FF9933",
+  "#33CCFF",
+  "#FFCC33",
+  "#33FFCC",
+  "#CC33FF",
+  "#FF6633",
+];
+
 const state: RaceState = {
   horses: [],
   schedule: [],
@@ -40,7 +63,7 @@ const actions = {
       horses.push({
         id: i,
         condition: Math.floor(Math.random() * 100) + 1,
-        color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+        color: colors[(i - 1) % colors.length],
       });
     }
     commit("setHorses", horses);

@@ -157,7 +157,7 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
-  width: max-content;
+  width: 50px;
   position: relative;
 }
 </style>
