@@ -1,9 +1,10 @@
 <template>
   <div class="race-controls">
-    <button @click="generateProgram">Generate Program</button>
-    <button @click="toggleRace">
+    <button @click="generateProgram" :disabled="isRunning || isGenerated">Generate Program</button>
+    <button @click="toggleRace" :disabled="!isGenerated">
       {{ isRunning ? "Stop" : "Start" }}
     </button>
+    <button @click="resetRace">Reset</button>
   </div>
 </template>
 
@@ -16,6 +17,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const isRunning = computed(() => store.getters.isRaceRunning);
+    const isGenerated = computed(() => store.getters.isGenerated);
 
     const generateProgram = () => {
       store.dispatch("generateHorses");
@@ -30,7 +32,11 @@ export default defineComponent({
       }
     };
 
-    return { generateProgram, toggleRace, isRunning };
+    const resetRace = () => {
+      store.dispatch("resetRace");
+    };
+
+    return { generateProgram, toggleRace, resetRace, isRunning, isGenerated };
   },
 });
 </script>
@@ -49,5 +55,9 @@ button {
 }
 button:hover {
   background-color: #0056b3;
+}
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 </style>

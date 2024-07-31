@@ -15,6 +15,7 @@ interface RaceState {
   running: boolean;
   finished: boolean;
   paused: boolean;
+  generated: boolean;
 }
 
 const colors = [
@@ -47,6 +48,7 @@ const state: RaceState = {
   running: false,
   finished: false,
   paused: false,
+  generated: false,
 };
 
 const getters = {
@@ -56,6 +58,7 @@ const getters = {
   isRaceRunning: (state: RaceState) => state.running,
   isRaceFinished: (state: RaceState) => state.finished,
   isRacePaused: (state: RaceState) => state.paused,
+  isGenerated: (state: RaceState) => state.generated,
 };
 
 const actions = {
@@ -83,8 +86,10 @@ const actions = {
       });
     }
     commit("setSchedule", schedule);
+    commit("setGenerated", true);
   },
   startRace({ commit, state }: { commit: any; state: RaceState }) {
+    if (!state.generated) return;
     if (!state.running) {
       commit("setRunning", true);
       commit("setPaused", false);
@@ -97,6 +102,9 @@ const actions = {
   stopRace({ commit }: { commit: any }) {
     commit("setRunning", false);
     commit("setPaused", false);
+  },
+  resetRace({ commit }: { commit: any }) {
+    commit("resetRaceState");
   },
 };
 
@@ -122,14 +130,26 @@ const mutations = {
   setPaused(state: RaceState, paused: boolean) {
     state.paused = paused;
   },
+  setGenerated(state: RaceState, generated: boolean) {
+    state.generated = generated;
+  },
   addRunResultWithFinishTimes(
     state: RaceState,
     { runIndex, resultHorses }: { runIndex: number; resultHorses: Horse[] }
   ) {
-    state.results[runIndex] = resultHorses.map(horse => ({
+    state.results[runIndex] = resultHorses.map((horse) => ({
       ...horse,
       finishTime: horse.finishTime,
     }));
+  },
+  resetRaceState(state: RaceState) {
+    state.horses = [];
+    state.schedule = [];
+    state.results = [];
+    state.running = false;
+    state.finished = false;
+    state.paused = false;
+    state.generated = false;
   },
 };
 
