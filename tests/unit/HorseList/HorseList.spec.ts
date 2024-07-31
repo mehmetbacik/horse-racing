@@ -43,8 +43,10 @@ describe("HorseList.vue", () => {
 
     const horseItems = wrapper.findAllComponents(HorseItem);
     expect(horseItems.length).toBe(2);
-    expect(horseItems[0].text()).toContain("Horse 1 - Condition: 70");
-    expect(horseItems[1].text()).toContain("Horse 2 - Condition: 90");
+    expect(horseItems[0].text()).toContain("Name: Horse 1");
+    expect(horseItems[0].text()).toContain("Condition: 70");
+    expect(horseItems[1].text()).toContain("Name: Horse 2");
+    expect(horseItems[1].text()).toContain("Condition: 90");
   });
 
   it("shows a message when there are no horses", async () => {

@@ -1,7 +1,7 @@
 <template>
   <div class="home flex flex-col h-screen">
     <header
-      class="header bg-gray-800 text-white p-4 flex justify-between items-center"
+      class="header sticky top-0 bg-gray-800 text-white p-4 flex justify-between items-center"
     >
       <RaceControls />
     </header>

@@ -13,7 +13,9 @@ describe('HorseItem.vue', () => {
       props: { horse },
     });
 
-    expect(wrapper.text()).toContain(`Horse ${horse.id} - Condition: ${horse.condition}`);
+    expect(wrapper.text()).toContain(`Name: Horse ${horse.id}`);
+    expect(wrapper.text()).toContain(`Condition: ${horse.condition}`);
+
     expect(wrapper.element.style.backgroundColor).toBe(horse.color);
   });
 });
