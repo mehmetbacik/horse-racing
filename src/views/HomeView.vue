@@ -5,16 +5,20 @@
     >
       <RaceControls />
     </header>
-    <main class="main-content flex flex-grow p-4">
-      <div class="left-area flex-1">
+    <main>
+      <div class="home-horse">
         <HorseList />
       </div>
-      <div class="center-area flex-2 mx-4">
-        <RaceAnimation />
-      </div>
-      <div class="right-area flex-1">
-        <RaceSchedule />
-        <RaceResults />
+      <div class="main-content flex flex-grow p-4">
+        <div class="left-area flex-1">
+          <RaceSchedule />
+        </div>
+        <div class="center-area flex-2 mx-4">
+          <RaceAnimation />
+        </div>
+        <div class="right-area flex-1">
+          <RaceResults />
+        </div>
       </div>
     </main>
   </div>

@@ -1,6 +1,10 @@
 <template>
-  <div :style="{ backgroundColor: horse.color }" class="horse-item">
-    Horse {{ horse.id }} - Condition: {{ horse.condition }}
+  <div
+    :style="{ backgroundColor: horse.color }"
+    class="flex items-center flex-col justify-center p-4"
+  >
+    <p class="text-white font-bold">Name: Horse {{ horse.id }}</p>
+    <p class="text-white font-semibold">Condition: {{ horse.condition }}</p>
   </div>
 </template>
 
