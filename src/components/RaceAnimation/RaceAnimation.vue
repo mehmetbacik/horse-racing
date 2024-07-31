@@ -1,9 +1,15 @@
 <template>
-  <div class="race-animation">
-    <h2>Race</h2>
+  <div class="race-animation mx-4 my-8">
+    <h2 class="text-2xl font-bold mb-2 bg-gray-800 text-white p-2 rounded">
+      Race
+    </h2>
     <div v-if="currentRun" class="race-info">
-      <h3>{{ currentRun.distance }}m</h3>
-      <p>Round: {{ currentRunIndex + 1 }} / 6</p>
+      <h3 class="text-xl font-semibold mb-4 bg-gray-200 p-2 rounded">
+        {{ currentRun.distance }}m
+      </h3>
+      <p class="text-xl font-semibold mb-4 bg-gray-800 text-white p-2 rounded">
+        Round: {{ currentRunIndex + 1 }} / 6
+      </p>
     </div>
     <div class="race-track">
       <div class="start-line">
@@ -24,9 +30,7 @@
           <font-awesome-icon icon="horse" :style="{ color: horse.color }" />
         </div>
       </div>
-      <div class="finish-line">
-        <font-awesome-icon icon="flag-checkered" />
-      </div>
+      <div class="finish-line">Finish</div>
     </div>
   </div>
 </template>
@@ -100,12 +104,41 @@ export default defineComponent({
       });
     };
 
+    const getEndPosition = () => {
+      const raceTrack = document.querySelector(".race-track");
+      const finishLine = document.querySelector(".finish-line");
+      const startLine = document.querySelector(".start-line");
+
+      if (raceTrack && finishLine && startLine) {
+        const raceTrackRect = raceTrack.getBoundingClientRect();
+        const finishLineRect = finishLine.getBoundingClientRect();
+        const startLineRect = startLine.getBoundingClientRect();
+        const endPosition = finishLineRect.left - raceTrackRect.left;
+        const startLineEnd = startLineRect.right - raceTrackRect.left;
+
+        const raceTrackWidth = raceTrackRect.width;
+
+        console.log("Race Track Width:", raceTrackWidth);
+        console.log("End Position:", endPosition);
+        console.log("Start Line End Position:", startLineEnd);
+        console.log(
+          "Calculated End Position for Animations:",
+          endPosition - startLineEnd
+        );
+
+        return endPosition - startLineEnd;
+      }
+      return 0;
+    };
+
     const animateRun = (horses: Horse[], distance: number) => {
       return new Promise<number[]>((resolve) => {
         const finishTimes: number[] = [];
         timeline = gsap.timeline({
           onComplete: () => resolve(finishTimes),
         });
+
+        const endPosition = getEndPosition();
 
         horses.forEach((horse, index) => {
           const duration = distance / (50 + Math.random() * 50);
@@ -115,7 +148,7 @@ export default defineComponent({
             `.horse:nth-child(${index + 1})`,
             {
               duration,
-              x: "500px",
+              x: `${endPosition}px`,
               ease: "linear",
             },
             0
@@ -146,47 +179,8 @@ export default defineComponent({
     return { currentRun, currentRunIndex };
   },
 });
-
 </script>
 
 <style scoped>
-.race-animation {
-  margin-top: 20px;
-}
-.race-info {
-  margin-bottom: 10px;
-}
-.race-track {
-  display: grid;
-  grid-template-columns: 1fr 3fr 1fr;
-  gap: 10px;
-  border: 1px solid #000;
-  padding: 10px;
-  width: 700px;
-  position: relative;
-}
-.start-line,
-.finish-line {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.finish-line {
-  border-right: 2px solid black;
-  height: 100%;
-  margin-right: 25px;
-}
-.race-line {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.horse {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  position: relative;
-}
+@import "./styles/RaceAnimation.scss";
 </style>
