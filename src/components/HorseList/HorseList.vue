@@ -1,12 +1,6 @@
 <template>
   <div class="horse-list">
-    <div
-      v-for="horse in sortedHorses"
-      :key="horse.id"
-      :style="{ backgroundColor: horse.color }"
-    >
-      Horse {{ horse.id }} - Condition: {{ horse.condition }}
-    </div>
+    <HorseItem v-for="horse in sortedHorses" :key="horse.id" :horse="horse" />
     <div v-if="sortedHorses.length === 0">No horses available.</div>
   </div>
 </template>
@@ -14,6 +8,7 @@
 <script lang="ts">
 import { defineComponent, computed } from "vue";
 import { useStore } from "vuex";
+import HorseItem from "./components/HorseItem.vue";
 
 interface Horse {
   id: number;
@@ -23,6 +18,9 @@ interface Horse {
 
 export default defineComponent({
   name: "HorseList",
+  components: {
+    HorseItem,
+  },
   setup() {
     const store = useStore();
     const horses = computed(() => store.getters.horseList);
@@ -36,14 +34,6 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-.horse-list {
-  display: flex;
-  flex-wrap: wrap;
-}
-.horse-list div {
-  margin: 5px;
-  padding: 10px;
-  border: 1px solid #000;
-}
+<style scoped lang="scss">
+@import './styles/HorseList.scss';
 </style>
