@@ -2,7 +2,7 @@
   <div class="race-controls">
     <button @click="generateProgram">Generate Program</button>
     <button @click="toggleRace">
-      {{ isRunning ? (isPaused ? "Resume" : "Pause") : "Start" }}
+      {{ isRunning ? "Stop" : "Start" }}
     </button>
   </div>
 </template>
@@ -16,7 +16,6 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const isRunning = computed(() => store.getters.isRaceRunning);
-    const isPaused = computed(() => store.getters.isRacePaused);
 
     const generateProgram = () => {
       store.dispatch("generateHorses");
@@ -24,10 +23,14 @@ export default defineComponent({
     };
 
     const toggleRace = () => {
-      store.dispatch("startRace");
+      if (isRunning.value) {
+        store.dispatch("stopRace");
+      } else {
+        store.dispatch("startRace");
+      }
     };
 
-    return { generateProgram, toggleRace, isRunning, isPaused };
+    return { generateProgram, toggleRace, isRunning };
   },
 });
 </script>

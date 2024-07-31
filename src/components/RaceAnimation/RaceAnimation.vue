@@ -60,7 +60,13 @@ export default defineComponent({
       () => store.getters["raceSchedule"][currentRunIndex.value]
     );
 
+    let timeline: gsap.core.Timeline | null = null;
+    let isAnimating = ref(false);
+
     const startRace = () => {
+      if (isAnimating.value) return;
+
+      isAnimating.value = true;
       const run = currentRun.value;
       if (run) {
         animateRun(run.horses, run.distance).then((finishTimes) => {
@@ -82,6 +88,7 @@ export default defineComponent({
           } else {
             store.commit("setRaceFinished", true);
           }
+          isAnimating.value = false;
         });
       }
     };
@@ -96,13 +103,15 @@ export default defineComponent({
     const animateRun = (horses: Horse[], distance: number) => {
       return new Promise<number[]>((resolve) => {
         const finishTimes: number[] = [];
-        const timeline = gsap.timeline({
+        timeline = gsap.timeline({
           onComplete: () => resolve(finishTimes),
         });
+
         horses.forEach((horse, index) => {
           const duration = distance / (50 + Math.random() * 50);
           finishTimes.push(duration);
-          timeline.to(
+
+          timeline?.to(
             `.horse:nth-child(${index + 1})`,
             {
               duration,
@@ -115,11 +124,21 @@ export default defineComponent({
       });
     };
 
+    const stopRace = () => {
+      if (timeline) {
+        timeline.pause();
+        resetHorsesPosition();
+        isAnimating.value = false;
+      }
+    };
+
     watch(
       () => store.state.race.running,
       (newValue) => {
         if (newValue) {
           startRace();
+        } else {
+          stopRace();
         }
       }
     );
@@ -127,6 +146,7 @@ export default defineComponent({
     return { currentRun, currentRunIndex };
   },
 });
+
 </script>
 
 <style scoped>

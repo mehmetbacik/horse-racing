@@ -1,4 +1,5 @@
 import { Module } from "vuex";
+import gsap from "gsap";
 
 interface Horse {
   id: number;
@@ -92,6 +93,10 @@ const actions = {
     } else {
       commit("setPaused", false);
     }
+  },
+  stopRace({ commit }: { commit: any }) {
+    commit("setRunning", false);
+    commit("setPaused", false);
   },
 };
 
