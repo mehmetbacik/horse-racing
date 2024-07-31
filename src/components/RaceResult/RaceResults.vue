@@ -1,18 +1,17 @@
 <template>
-  <div class="race-results">
-    <h2>Results</h2>
-    <div v-for="(result, index) in sortedResults" :key="index" class="result">
-      <h3>{{ distances[index] }}m</h3>
-      <ul>
-        <li
-          v-for="(horse, position) in result"
-          :key="horse.id"
-          :style="{ color: horse.color }"
-        >
-          Position: {{ position + 1 }} - Horse {{ horse.id }} - Condition:
-          {{ horse.condition }} - Finish Time: {{ horse.finishTime.toFixed(2) }}s
-        </li>
-      </ul>
+  <div class="mx-4 my-8">
+    <h2 class="text-2xl font-bold mb-2 bg-gray-800 text-white p-2 rounded">
+      Results
+    </h2>
+    <div class="overflow-y-auto h-96">
+      <div class="grid grid-cols-1 md:grid-cols-1 gap-8">
+        <div v-for="(result, index) in sortedResults" :key="index" class="mb-2">
+          <h3 class="text-xl font-semibold mb-4 bg-gray-200 p-2 rounded">
+            {{ distances[index] }}m
+          </h3>
+          <ResultTable :horses="result" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -20,9 +19,13 @@
 <script lang="ts">
 import { defineComponent, computed } from "vue";
 import { useStore } from "vuex";
+import ResultTable from "./components/ResultTable.vue";
 
 export default defineComponent({
   name: "RaceResults",
+  components: {
+    ResultTable,
+  },
   setup() {
     const store = useStore();
     const results = computed(() => store.getters["raceResults"]);
@@ -38,12 +41,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-.race-results {
-  margin-top: 20px;
-}
-.result {
-  margin-bottom: 10px;
-}
-</style>
