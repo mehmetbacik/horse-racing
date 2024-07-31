@@ -1,22 +1,22 @@
 <template>
-  <div class="home flex flex-col h-screen">
+  <div class="home">
     <header
       class="header sticky top-0 bg-gray-800 text-white p-4 flex justify-between items-center"
     >
       <RaceControls />
     </header>
-    <main>
+    <main class="main-content">
       <div class="home-horse">
         <HorseList />
       </div>
-      <div class="main-content flex flex-grow p-4">
-        <div class="left-area flex-1">
+      <div class="content-wrapper">
+        <div class="left-area">
           <RaceSchedule />
         </div>
-        <div class="center-area flex-2 mx-4">
+        <div class="center-area">
           <RaceAnimation />
         </div>
-        <div class="right-area flex-1">
+        <div class="right-area">
           <RaceResults />
         </div>
       </div>
@@ -44,37 +44,60 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .home {
+  display: flex;
+  flex-direction: column;
+
   .header {
-    background-color: #333;
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    z-index: 10;
   }
-  .main-content {
+
+  main {
+    flex: 1;
     display: flex;
-    flex-grow: 1;
-    padding: 1rem;
-    overflow: auto;
-    .left-area {
-      @media (min-width: 640px) {
-        max-width: 20%;
-      }
+    flex-direction: column;
+    overflow: hidden;
+
+    .home-horse {
+      padding: 16px;
     }
-    .center-area {
-      @media (min-width: 640px) {
-        max-width: 60%;
-      }
-    }
-    .right-area {
+
+    .content-wrapper {
+      flex: 1;
       display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      @media (min-width: 640px) {
-        max-width: 20%;
+      flex-direction: row;
+      padding: 16px;
+      gap: 16px;
+      @media (max-width: 768px) {
+        flex-direction: column;
       }
+
+      .left-area,
+      .right-area {
+        flex: 1;
+        min-width: 200px;
+      }
+
+      .center-area {
+        flex: 1;
+        min-width: 300px;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+
+    .center-area {
+      order: 1;
+    }
+
+    .left-area {
+      order: 2;
+    }
+
+    .right-area {
+      order: 3;
     }
   }
 }
