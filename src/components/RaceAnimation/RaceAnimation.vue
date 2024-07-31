@@ -64,12 +64,14 @@ export default defineComponent({
       const run = currentRun.value;
       if (run) {
         animateRun(run.horses, run.distance).then((finishTimes) => {
-          run.horses.forEach((horse, index) => {
-            horse.finishTime = finishTimes[index];
-          });
-          store.commit("addRunResult", {
+          const resultHorses = run.horses.map((horse, index) => ({
+            ...horse,
+            finishTime: finishTimes[index],
+          }));
+
+          store.commit("addRunResultWithFinishTimes", {
             runIndex: currentRunIndex.value,
-            horses: run.horses,
+            resultHorses,
           });
           currentRunIndex.value += 1;
           if (currentRunIndex.value < 6) {
@@ -99,7 +101,7 @@ export default defineComponent({
         });
         horses.forEach((horse, index) => {
           const duration = distance / (50 + Math.random() * 50);
-          finishTimes[index] = duration;
+          finishTimes.push(duration);
           timeline.to(
             `.horse:nth-child(${index + 1})`,
             {

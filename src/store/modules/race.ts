@@ -106,9 +106,7 @@ const mutations = {
     state: RaceState,
     { runIndex, horses }: { runIndex: number; horses: Horse[] }
   ) {
-    state.results[runIndex] = horses.sort(
-      (a, b) => a.finishTime! - b.finishTime!
-    );
+    state.results[runIndex] = horses;
   },
   setRunning(state: RaceState, running: boolean) {
     state.running = running;
@@ -118,6 +116,15 @@ const mutations = {
   },
   setPaused(state: RaceState, paused: boolean) {
     state.paused = paused;
+  },
+  addRunResultWithFinishTimes(
+    state: RaceState,
+    { runIndex, resultHorses }: { runIndex: number; resultHorses: Horse[] }
+  ) {
+    state.results[runIndex] = resultHorses.map(horse => ({
+      ...horse,
+      finishTime: horse.finishTime,
+    }));
   },
 };
 

@@ -1,7 +1,7 @@
 <template>
   <div class="race-results">
     <h2>Results</h2>
-    <div v-for="(result, index) in results" :key="index" class="result">
+    <div v-for="(result, index) in sortedResults" :key="index" class="result">
       <h3>{{ distances[index] }}m</h3>
       <ul>
         <li
@@ -10,7 +10,7 @@
           :style="{ color: horse.color }"
         >
           Position: {{ position + 1 }} - Horse {{ horse.id }} - Condition:
-          {{ horse.condition }}
+          {{ horse.condition }} - Finish Time: {{ horse.finishTime.toFixed(2) }}s
         </li>
       </ul>
     </div>
@@ -27,7 +27,14 @@ export default defineComponent({
     const store = useStore();
     const results = computed(() => store.getters["raceResults"]);
     const distances = [1200, 1400, 1600, 1800, 2000, 2200];
-    return { results, distances };
+
+    const sortedResults = computed(() =>
+      results.value.map((run: any) =>
+        [...run].sort((a, b) => a.finishTime - b.finishTime)
+      )
+    );
+
+    return { sortedResults, distances };
   },
 });
 </script>
