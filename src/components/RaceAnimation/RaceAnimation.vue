@@ -40,6 +40,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 interface Horse {
   id: number;
   color: string;
+  finishTime?: number;
 }
 
 interface Run {
@@ -62,7 +63,10 @@ export default defineComponent({
     const startRace = () => {
       const run = currentRun.value;
       if (run) {
-        animateRun(run.horses, run.distance).then(() => {
+        animateRun(run.horses, run.distance).then((finishTimes) => {
+          run.horses.forEach((horse, index) => {
+            horse.finishTime = finishTimes[index];
+          });
           store.commit("addRunResult", {
             runIndex: currentRunIndex.value,
             horses: run.horses,
@@ -88,15 +92,18 @@ export default defineComponent({
     };
 
     const animateRun = (horses: Horse[], distance: number) => {
-      return new Promise<void>((resolve) => {
+      return new Promise<number[]>((resolve) => {
+        const finishTimes: number[] = [];
         const timeline = gsap.timeline({
-          onComplete: resolve,
+          onComplete: () => resolve(finishTimes),
         });
         horses.forEach((horse, index) => {
+          const duration = distance / (50 + Math.random() * 50);
+          finishTimes[index] = duration;
           timeline.to(
             `.horse:nth-child(${index + 1})`,
             {
-              duration: distance / (50 + Math.random() * 50),
+              duration,
               x: "500px",
               ease: "linear",
             },

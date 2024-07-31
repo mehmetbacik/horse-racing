@@ -4,12 +4,13 @@ interface Horse {
   id: number;
   condition: number;
   color: string;
+  finishTime?: number;
 }
 
 interface RaceState {
   horses: Horse[];
   schedule: any[];
-  results: any[];
+  results: Horse[][];
   running: boolean;
   finished: boolean;
   paused: boolean;
@@ -105,7 +106,9 @@ const mutations = {
     state: RaceState,
     { runIndex, horses }: { runIndex: number; horses: Horse[] }
   ) {
-    state.results[runIndex] = horses;
+    state.results[runIndex] = horses.sort(
+      (a, b) => a.finishTime! - b.finishTime!
+    );
   },
   setRunning(state: RaceState, running: boolean) {
     state.running = running;
